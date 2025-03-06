@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Transit Routes Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" /> <!-- Link to the external CSS file -->
+</head>
+<body>
+  <div id="map"></div>
+  <div id="legend">
+    <strong>Route Numbers</strong>
+    <br>
+    <input type="text" id="searchInput" placeholder="Search...">
+    <ul id="routeList"></ul>
+  </div>
+  <script src="script.js"></script> <!-- Link to the external JavaScript file -->
+</body>
+</html>

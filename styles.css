@@ -1,0 +1,33 @@
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+#legend {
+  position: absolute;
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+  z-index: 1;
+  max-height: 300px; /* Adjust the height as needed */
+  overflow-y: auto;
+}
+#legend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#legend li {
+  margin: 5px 0;
+  cursor: pointer;
+}
+#legend li:hover {
+  background-color: #f0f0f0;
+}
+#searchInput {
+  width: 100px; /* Adjust the width to match the title */
+  padding: 2px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  font-size: 12px;
+}
