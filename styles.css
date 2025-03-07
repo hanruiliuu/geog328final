@@ -32,8 +32,5 @@ body { margin: 0; padding: 0; }
   font-size: 12px;
 }
 #toggleHeatmap {
-  position: absolute;
-  top: 10px;
-  left: 200px; /* Adjust the left position to place it next to the legend */
-  z-index: 1;
+  margin-top: 10px; /* Add some margin to separate it from the legend content */
 }
