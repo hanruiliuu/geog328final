@@ -10,6 +10,7 @@ const map = new mapboxgl.Map({
 let highlightedRouteId = null;
 
 map.on('load', () => {
+  // Fetch and add transit routes
   fetch('assets/Cleaned_Transit_Routes.geojson')
     .then(response => {
       if (!response.ok) {
@@ -18,8 +19,6 @@ map.on('load', () => {
       return response.json();
     })
     .then(data => {
-      console.log('GeoJSON data:', data); // Debugging log
-
       // Assign unique IDs to each feature if they don't already have one
       data.features.forEach((feature, index) => {
         if (!feature.id) {
@@ -30,63 +29,6 @@ map.on('load', () => {
       map.addSource('transitRoutes', {
         type: 'geojson',
         data: data
-      });
-
-      // Add heatmap layer
-      map.addLayer({
-        id: 'transitRoutesHeatmap',
-        type: 'heatmap',
-        source: 'transitRoutes',
-        maxzoom: 15,
-        paint: {
-          // Increase the heatmap weight based on frequency and property magnitude
-          'heatmap-weight': [
-            'interpolate',
-            ['linear'],
-            ['get', 'magnitude'],
-            0, 0,
-            6, 1
-          ],
-          // Increase the heatmap color weight weight by zoom level
-          // heatmap-intensity is a multiplier on top of heatmap-weight
-          'heatmap-intensity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            0, 1,
-            15, 3
-          ],
-          // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-          // Begin color ramp at 0-stop with a 0-transparancy color
-          // to create a blur-like effect.
-          'heatmap-color': [
-            'interpolate',
-            ['linear'],
-            ['heatmap-density'],
-            0, 'rgba(33,102,172,0)',
-            0.2, 'rgb(103,169,207)',
-            0.4, 'rgb(209,229,240)',
-            0.6, 'rgb(253,219,199)',
-            0.8, 'rgb(239,138,98)',
-            1, 'rgb(178,24,43)'
-          ],
-          // Adjust the heatmap radius by zoom level
-          'heatmap-radius': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            0, 2,
-            15, 20
-          ],
-          // Transition from heatmap to circle layer by zoom level
-          'heatmap-opacity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            7, 1,
-            15, 0
-          ],
-        }
       });
 
       // Add line layer for routes
@@ -122,8 +64,6 @@ map.on('load', () => {
             line.forEach(coord => {
               if (coord && !isNaN(coord[0]) && !isNaN(coord[1])) {
                 bounds.extend(coord);
-              } else {
-                console.warn('Invalid coordinate:', coord); // Debugging log
               }
             });
           });
@@ -131,8 +71,6 @@ map.on('load', () => {
           feature.geometry.coordinates.forEach(coord => {
             if (coord && !isNaN(coord[0]) && !isNaN(coord[1])) {
               bounds.extend(coord);
-            } else {
-              console.warn('Invalid coordinate:', coord); // Debugging log
             }
           });
         }
@@ -184,7 +122,6 @@ map.on('load', () => {
                   { source: 'transitRoutes', id: highlightedRouteId },
                   { clicked: true }
                 );
-                console.log(`Highlighted route ID: ${highlightedRouteId}`); // Debugging log
               }
             });
             li.addEventListener('mouseenter', () => {
@@ -217,79 +154,276 @@ map.on('load', () => {
         updateRouteList(e.target.value);
       });
 
-      // Add click event listener
-      map.on('click', 'transitRoutesLayer', (e) => {
-        const coordinates = e.features[0].geometry.coordinates.slice();
+      // Show route number on hover
+      map.on('mouseenter', 'transitRoutesLayer', (e) => {
+        map.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.lngLat;
         const routeNum = e.features[0].properties.ROUTE_NUM;
-        const objectId = e.features[0].properties.OBJECTID;
-        const shapeLength = e.features[0].properties.SHAPE_Length;
-
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0][0]) > 180) {
-          coordinates[0][0] += e.lngLat.lng > coordinates[0][0] ? 360 : -360;
-        }
 
         // Create a popup
         new mapboxgl.Popup()
-          .setLngLat(e.lngLat)
-          .setHTML(`<strong>Route Number:</strong> ${routeNum}<br><strong>Object ID:</strong> ${objectId}<br><strong>Shape Length:</strong> ${shapeLength}`)
+          .setLngLat(coordinates)
+          .setHTML(`<strong>Route Number:</strong> ${routeNum}`)
           .addTo(map);
+      });
 
-        // Highlight the selected route
+      // Remove popup and reset cursor when leaving the route
+      map.on('mouseleave', 'transitRoutesLayer', () => {
+        map.getCanvas().style.cursor = '';
+        const popups = document.getElementsByClassName('mapboxgl-popup');
+        if (popups.length) {
+          popups[0].remove();
+        }
+      });
+
+      // Deselect route when clicking on the map
+      map.on('click', (e) => {
+        if (!map.queryRenderedFeatures(e.point, { layers: ['transitRoutesLayer'] }).length) {
+          if (highlightedRouteId !== null) {
+            map.setFeatureState(
+              { source: 'transitRoutes', id: highlightedRouteId },
+              { clicked: false }
+            );
+            highlightedRouteId = null;
+          }
+        }
+      });
+
+      // Deselect route when clicking on stops
+      map.on('click', 'transitStopsLayer', () => {
         if (highlightedRouteId !== null) {
           map.setFeatureState(
             { source: 'transitRoutes', id: highlightedRouteId },
             { clicked: false }
           );
+          highlightedRouteId = null;
         }
-        highlightedRouteId = e.features[0].id;
-        map.setFeatureState(
-          { source: 'transitRoutes', id: highlightedRouteId },
-          { clicked: true }
-        );
-        console.log(`Highlighted route ID: ${highlightedRouteId}`); // Debugging log
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching GeoJSON data:', error);
+    });
+
+  // Fetch and add transit stops
+  fetch('assets/Cleaned_Transit_Stops.geojson')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      map.addSource('transitStops', {
+        type: 'geojson',
+        data: data
       });
 
-      // Change the cursor to a pointer when the mouse is over the routes
-      map.on('mouseenter', 'transitRoutesLayer', (e) => {
-        map.getCanvas().style.cursor = 'pointer';
+      // Add circle layer for stops
+      map.addLayer({
+        id: 'transitStopsLayer',
+        type: 'circle',
+        source: 'transitStops',
+        layout: {
+          visibility: 'none' // Start with stops toggled off
+        },
+        paint: {
+          'circle-radius': 6,
+          'circle-color': '#FFFF00', // Yellow color for stops
+          'circle-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            10, 0,
+            12, 1
+          ]
+        }
+      });
+
+      // Add click event listener for stops
+      map.on('click', 'transitStopsLayer', (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const stopId = e.features[0].properties.STOP_ID;
+        const stopStatus = e.features[0].properties.STOP_STATUS;
+        const accessibilityDecal = e.features[0].properties.ACCESSIBILITY_DECAL;
+
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        // Create a popup
+        new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(`<strong>Stop ID:</strong> ${stopId}<br><strong>Status:</strong> ${stopStatus}<br><strong>Accessibility Decal:</strong> ${accessibilityDecal}`)
+          .addTo(map);
+
+        // Deselect route when clicking on stops
         if (highlightedRouteId !== null) {
           map.setFeatureState(
             { source: 'transitRoutes', id: highlightedRouteId },
-            { hover: false }
+            { clicked: false }
           );
+          highlightedRouteId = null;
         }
-        highlightedRouteId = e.features[0].id;
-        map.setFeatureState(
-          { source: 'transitRoutes', id: highlightedRouteId },
-          { hover: true }
-        );
+      });
+
+      // Change the cursor to a pointer when the mouse is over the stops
+      map.on('mouseenter', 'transitStopsLayer', () => {
+        map.getCanvas().style.cursor = 'pointer';
       });
 
       // Change it back to default when it leaves
-      map.on('mouseleave', 'transitRoutesLayer', () => {
+      map.on('mouseleave', 'transitStopsLayer', () => {
         map.getCanvas().style.cursor = '';
-        if (highlightedRouteId !== null) {
-          map.setFeatureState(
-            { source: 'transitRoutes', id: highlightedRouteId },
-            { hover: false }
-          );
-          highlightedRouteId = null;
+      });
+
+      // Toggle stops visibility
+      const toggleStopsButton = document.getElementById('toggleStops');
+      toggleStopsButton.addEventListener('click', () => {
+        const visibility = map.getLayoutProperty('transitStopsLayer', 'visibility');
+        if (visibility === 'visible') {
+          map.setLayoutProperty('transitStopsLayer', 'visibility', 'none');
+        } else {
+          map.setLayoutProperty('transitStopsLayer', 'visibility', 'visible');
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching GeoJSON data:', error);
+    });
+
+  // Fetch and add median household income data
+  fetch('assets/Cleaned_Median_Household_Income.geojson')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      map.addSource('medianIncome', {
+        type: 'geojson',
+        data: data
+      });
+
+      // Add heatmap layer for median household income
+      map.addLayer({
+        id: 'medianIncomeHeatmap',
+        type: 'heatmap',
+        source: 'medianIncome',
+        maxzoom: 15,
+        paint: {
+          // Increase the heatmap weight based on median_household_income
+          'heatmap-weight': [
+            'interpolate',
+            ['linear'],
+            ['get', 'median_household_income'],
+            0, 0,
+            100000, 1
+          ],
+          // Increase the heatmap color weight by zoom level
+          // heatmap-intensity is a multiplier on top of heatmap-weight
+          'heatmap-intensity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0, 1,
+            15, 3
+          ],
+          // Color ramp for heatmap. Domain is 0 (low) to 1 (high).
+          // Begin color ramp at 0-stop with a 0-transparency color
+          // to create a blur-like effect.
+          'heatmap-color': [
+            'interpolate',
+            ['linear'],
+            ['heatmap-density'],
+            0, 'rgba(33,102,172,0)',
+            0.1, 'rgb(103,169,207)',
+            0.3, 'rgb(209,229,240)',
+            0.5, 'rgb(253,219,199)',
+            0.7, 'rgb(239,138,98)',
+            1, 'rgb(178,24,43)'
+          ],
+          // Adjust the heatmap radius by zoom level
+          'heatmap-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0, 2,
+            15, 20
+          ],
+          // Transition from heatmap to circle layer by zoom level
+          'heatmap-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            7, 1,
+            15, 0
+          ],
+        }
+      });
+
+      // Show median_household_income on hover
+      map.on('mouseenter', 'medianIncomeHeatmap', (e) => {
+        map.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.lngLat;
+        const income = e.features[0].properties.median_household_income;
+
+        // Create a popup
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(`<strong>Median Household Income:</strong> $${income}`)
+          .addTo(map);
+      });
+
+      // Remove popup and reset cursor when leaving the heatmap
+      map.on('mouseleave', 'medianIncomeHeatmap', () => {
+        map.getCanvas().style.cursor = '';
+        const popups = document.getElementsByClassName('mapboxgl-popup');
+        if (popups.length) {
+          popups[0].remove();
         }
       });
 
       // Toggle heatmap visibility
       const toggleHeatmapButton = document.getElementById('toggleHeatmap');
       toggleHeatmapButton.addEventListener('click', () => {
-        const visibility = map.getLayoutProperty('transitRoutesHeatmap', 'visibility');
+        const visibility = map.getLayoutProperty('medianIncomeHeatmap', 'visibility');
         if (visibility === 'visible') {
-          map.setLayoutProperty('transitRoutesHeatmap', 'visibility', 'none');
+          map.setLayoutProperty('medianIncomeHeatmap', 'visibility', 'none');
         } else {
-          map.setLayoutProperty('transitRoutesHeatmap', 'visibility', 'visible');
+          map.setLayoutProperty('medianIncomeHeatmap', 'visibility', 'visible');
         }
       });
+
+      // Create legend for heatmap
+      const heatmapLegend = document.getElementById('heatmapLegend');
+      if (heatmapLegend) {
+        const incomeRanges = [
+          { color: 'rgba(33,102,172,0)', label: '< $20,000' },
+          { color: 'rgb(103,169,207)', label: '$20,000 - $40,000' },
+          { color: 'rgb(209,229,240)', label: '$40,000 - $60,000' },
+          { color: 'rgb(253,219,199)', label: '$60,000 - $80,000' },
+          { color: 'rgb(239,138,98)', label: '$80,000 - $100,000' },
+          { color: 'rgb(178,24,43)', label: '> $100,000' }
+        ];
+
+        incomeRanges.forEach(range => {
+          const legendItem = document.createElement('div');
+          const colorBox = document.createElement('span');
+          colorBox.style.backgroundColor = range.color;
+          colorBox.className = 'legend-color-box';
+          const label = document.createElement('span');
+          label.textContent = range.label;
+          legendItem.appendChild(colorBox);
+          legendItem.appendChild(label);
+          heatmapLegend.appendChild(legendItem);
+        });
+      } else {
+        console.error('heatmapLegend element not found');
+      }
     })
     .catch(error => {
       console.error('Error fetching GeoJSON data:', error);

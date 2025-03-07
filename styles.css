@@ -31,6 +31,23 @@ body { margin: 0; padding: 0; }
   box-sizing: border-box;
   font-size: 12px;
 }
-#toggleHeatmap {
-  margin-top: 10px; /* Add some margin to separate it from the legend content */
+#toggleHeatmap, #toggleStops {
+  margin-top: 5px; /* Add some margin to separate the buttons */
+  display: inline-block;
+}
+.legend {
+  position: absolute;
+  bottom: 30px;
+  left: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+.legend-color-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  vertical-align: middle;
 }

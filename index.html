@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Transit Routes Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
-  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
-  <link href="styles.css" rel="stylesheet" /> <!-- Link to the external CSS file -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Visualization</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="map"></div>
   <div id="legend">
     <strong>Route Numbers</strong>
     <br>
-    <button id="toggleHeatmap">Toggle Heatmap</button> <!-- Toggle Heatmap Button -->
     <input type="text" id="searchInput" placeholder="Search...">
+    <br>
+    <button id="toggleHeatmap">Toggle Heatmap</button> <!-- Toggle Heatmap Button -->
+    <button id="toggleStops">Toggle Stops</button> <!-- Toggle Stops Button -->
     <ul id="routeList"></ul>
   </div>
-  <script src="script.js"></script> <!-- Link to the external JavaScript file -->
+  <div id="heatmapLegend" class="legend"></div> <!-- Heatmap Legend -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
