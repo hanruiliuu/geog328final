@@ -11,7 +11,7 @@ Seattle’s public transit system is essential for residents commuting to jobs, 
 
 With this project we developed an **interactive Web GIS application** to visualize public transport accessibility in King County. Our web-based tool integrates transit stop data and demographic overlays to highlight areas with. Users can interact with the map to explore transit gaps, identify patterns in accessibility, and support data-driven transportation planning. This project aims to assist **city planners, researchers, and advocacy groups** in improving transit equity across Seattle.  
 
-📍 **Live Web Application:** [https://github.com/hanruiliuu/geog328final.git]  
+📍 **Live Web Application:** [https://hanruiliuu.github.io/geog328final/]  
 
 ## **Project Goals**  
 - **Map public transit stops** in King County and analyze differences in accessibility.  
@@ -118,7 +118,7 @@ We extend our thanks to:
 ---
 
 🔗 **GitHub Repository:** [https://github.com/hanruiliuu/geog328final.git]  
-📍 **Live Web App:** [Insert Live URL Here]  
+📍 **Live Web App:** [https://hanruiliuu.github.io/geog328final/]  
 
 
 
