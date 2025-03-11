@@ -9,6 +9,46 @@ body {
   bottom: 0;
   width: 100%;
 }
+/* Navigation Bar */
+.topnav {
+    background-color: #977bf5cc;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.topnav a {
+    color: #eae8e9;
+    text-decoration: none;
+    padding: 14px 20px;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.topnav a:hover {
+    background-color: #b47647;
+    border-radius: 5px;
+}
+
+/* Responsive Navigation Bar */
+.topnav .icon {
+    display: none;
+}
+
+/* Content Formatting */
+.content {
+    padding: 100px 20px; /* Prevent content from being hidden under navbar */
+    max-width: 800px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding-bottom: 40px;
+}
 
 #legend {
   position: absolute;
