@@ -14,13 +14,15 @@
     <br>
     <input type="text" id="searchInput" placeholder="Search...">
     <br>
-    <button id="toggleHeatmap">Toggle Heatmap</button> <!-- Toggle Heatmap Button -->
-    <button id="toggleStops">Toggle Stops</button> <!-- Toggle Stops Button -->
-    <button id="toggleLightRail">Toggle Light Rail Stations</button>
-
     <ul id="routeList"></ul>
   </div>
-  <div id="heatmapLegend" class="legend"></div> <!-- Heatmap Legend -->
+  <div id="heatmapLegend" class="legend"></div>
+  <div id="controls" class="controls">
+    <button id="toggleHeatmap">Toggle Heatmap</button>
+    <button id="toggleStops">Toggle Stops</button>
+    <button id="toggleLightRail">Toggle Light Rail</button>
+    <button id="toggleBusRoutes">Toggle Bus Routes</button> <!-- New button for bus routes -->
+  </div>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
   <script src="script.js"></script>
 </body>

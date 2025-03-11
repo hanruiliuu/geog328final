@@ -1,7 +1,19 @@
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 #legend {
   position: absolute;
+  top: 10px;
+  left: 10px;
   background: white;
   padding: 10px;
   margin: 10px;
@@ -12,18 +24,22 @@ body { margin: 0; padding: 0; }
   max-height: 300px; /* Adjust the height as needed */
   overflow-y: auto;
 }
+
 #legend ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 #legend li {
   margin: 5px 0;
   cursor: pointer;
 }
+
 #legend li:hover {
   background-color: #f0f0f0;
 }
+
 #searchInput {
   width: 100px; /* Adjust the width to match the title */
   padding: 2px;
@@ -31,11 +47,21 @@ body { margin: 0; padding: 0; }
   box-sizing: border-box;
   font-size: 12px;
 }
+
 #toggleHeatmap, #toggleStops {
   margin-top: 5px; /* Add some margin to separate the buttons */
   display: inline-block;
 }
-.legend {
+
+.legend-color-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+#heatmapLegend {
   position: absolute;
   bottom: 30px;
   left: 10px;
@@ -44,10 +70,22 @@ body { margin: 0; padding: 0; }
   border-radius: 3px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
-.legend-color-box {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-  vertical-align: middle;
+
+#controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+#controls button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
 }
