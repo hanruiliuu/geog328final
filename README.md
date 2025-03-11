@@ -76,9 +76,9 @@ Our repository is structured as follows:
 
 
 ### **GitHub Best Practices Used**  
-✅ **Organized Repository** – Clear folder structure and well-commented code.  
-✅ **GitHub Issues** – Used for tracking tasks, feature requests, and bug fixes.  
-✅ **Version Control** – All commits are documented for transparency.  
+**Organized Repository** – Clear folder structure and well-commented code.  
+**GitHub Issues** – Used for tracking tasks, feature requests, and bug fixes.  
+**Version Control** – All commits are documented for transparency.  
 
 ## **Applied Libraries & Technologies**  
 | Technology       | Purpose |
