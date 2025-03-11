@@ -65,7 +65,7 @@ We processed the dataset using assistance from AI to improve usability and perfo
 - **Sorting & Filtering** – Users can sort transit stops by mode or accessibility level.  
 
 ## **Favicon**  
-We created a **custom favicon** for our Web GIS application to enhance user experience. This icon represents **King County's public transit system**, ensuring our webpage has a visually distinct and professional look. The favicon was designed using **[Insert Tool Name]** and is stored in the `/assets` folder.  
+We got our icons from www.icons8.com for our light rails stations and is stored in the `/assets` folder.  
 
 ## **Project Management on GitHub**  
 Our repository is structured as follows:  
