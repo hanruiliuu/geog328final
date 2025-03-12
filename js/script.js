@@ -30,7 +30,7 @@ const fetchData = async (url) => {
 };
 
 const addTransitRoutes = async () => {
-  const data = await fetchData('assets/Cleaned_Transit_Routes.geojson');
+  const data = await fetchData('../assets/Cleaned_Transit_Routes.geojson');
   data.features.forEach((feature, index) => {
     if (!feature.id) feature.id = index;
   });
@@ -129,7 +129,7 @@ const addTransitRoutes = async () => {
 };
 
 const addTransitStops = async () => {
-  const data = await fetchData('assets/Cleaned_Transit_Stops.geojson');
+  const data = await fetchData('../assets/Cleaned_Transit_Stops.geojson');
   map.addSource('transitStops', { type: 'geojson', data });
 
   addLayer('transitStopsLayer', 'circle', 'transitStops', {
@@ -171,12 +171,12 @@ const addTransitStops = async () => {
 };
 
 const addLightRailMarkers = async () => {
-  const lightRailStations = await fetchData('assets/light_rail_stations.json');
+  const lightRailStations = await fetchData('../assets/light_rail_stations.json');
 
   lightRailStations.forEach(({ lng, lat, title }) => {
     const el = document.createElement('div');
     el.className = 'light-rail-marker';
-    el.style.backgroundImage = "url('assets/lightrail.png')";
+    el.style.backgroundImage = "url('../assets/lightrail.png')";
     el.style.width = '30px';
     el.style.height = '30px';
     el.style.backgroundSize = 'cover';
@@ -204,7 +204,7 @@ const addLightRailMarkers = async () => {
 };
 
 const addMedianIncomeHeatmap = async () => {
-  const data = await fetchData('assets/Cleaned_Median_Household_Income.geojson');
+  const data = await fetchData('../assets/Cleaned_Median_Household_Income.geojson');
   map.addSource('medianIncome', { type: 'geojson', data });
 
   addLayer('medianIncomeHeatmap', 'heatmap', 'medianIncome', {
