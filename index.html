@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Map Visualization</title>
+  <title>King County Transit Map</title>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header>
+    <nav class="navbar">
+      <a href="home.html">Homepage</a>
+      <a href="index.html" class="active">King County Transit Map</a>
+    </nav>
+  </header>
 
-  <!-- Navigation bar -->
-    <div class="topnav" id="myTopnav">
-        <!-- Active link pointing to the index.html page -->
-        <a class="active" href="index.html"><i class="fa fa-fw fa-home"></i>Home</a>
-
-        <!-- Links to other sections -->
-        <a href="teams.html"><i class="fa fa-cutlery"></i>The Team</a>
-      
   <div id="map"></div>
+
   <div id="legend">
     <strong>Route Numbers</strong>
     <br>
@@ -25,14 +24,17 @@
     <br>
     <ul id="routeList"></ul>
   </div>
+
   <div id="heatmapLegend" class="legend"></div>
+
   <div id="controls" class="controls">
     <button id="toggleHeatmap">Toggle Heatmap</button>
     <button id="toggleStops">Toggle Stops</button>
     <button id="toggleLightRail">Toggle Light Rail</button>
-    <button id="toggleBusRoutes">Toggle Bus Routes</button> <!-- New button for bus routes -->
+    <button id="toggleBusRoutes">Toggle Bus Routes</button>
   </div>
+
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
-  <script src="js/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
