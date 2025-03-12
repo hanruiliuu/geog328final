@@ -118,7 +118,7 @@ We extend our thanks to:
 ---
 
 🔗 **GitHub Repository:** [https://github.com/hanruiliuu/geog328final.git]  
-📍 **Live Web App:** [https://hanruiliuu.github.io/geog328final/]  
+📍 **Live Web App:** [https://hanruiliuu.github.io/geog328final/pages/home.html]  
 
 
 
